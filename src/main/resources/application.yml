@@ -1,0 +1,36 @@
+server:
+  port: 10000
+
+
+#服务的名称
+spring:
+  application:
+    name: api-gateway
+
+
+
+#指定注册中心地址
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:9000/eureka/
+
+#/order-service/api/v1/order/save?user_id=2&product_id=1
+#自定义路由映射
+zuul:
+  routes:
+    order-service: /apigateway/**
+    product-service: /apigateway/**
+    common_service: /apigateway/**
+    parking_sercive: /apigateway/**
+    parkyy_service: /apigateway/**
+    pay_service: /apigateway/**
+    statistics_service: /apigateway/**
+    temppark_service: /apigateway/**
+  #统一入口为上面的配置，其他入口忽略
+  ignored-patterns: /*-service/**
+  #忽略整个服务，对外提供接口
+  #ignored-services: product-service
+
