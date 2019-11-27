@@ -13,10 +13,11 @@ spring:
 eureka:
   instance:
     hostname: 39.105.82.150
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port} # 指定实例ID,就不会显示主机名
   client:
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:9000/eureka/
-
 #/order-service/api/v1/order/save?user_id=2&product_id=1
 #自定义路由映射
 zuul:
