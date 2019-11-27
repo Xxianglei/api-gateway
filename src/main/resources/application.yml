@@ -31,7 +31,7 @@ zuul:
     statistics-service: /apigateway/**
     temppark-service: /apigateway/**
   #统一入口为上面的配置，其他入口忽略
-  ignored-patterns: /*-service/**
+ # ignored-patterns: /*-service/**
   #忽略整个服务，对外提供接口
-  #ignored-services: product-service
+  ignored-services: *
 
