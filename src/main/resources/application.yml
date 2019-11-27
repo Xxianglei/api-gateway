@@ -23,7 +23,15 @@ spring:
     timeBetweenEvictionRunsMillis: 60000
   # 配置一个连接在池中最小生存的时间，单位是毫秒
     minEvictableIdleTimeMillis: 300000
-
+  session:
+    ## Spring Session配置
+    store-type: redis
+    timeout: PT30M
+  redis:
+    host: 121.199.28.140
+    port: 6379
+    password:
+    timeout: PT30M
 
 
 #指定注册中心地址
@@ -36,7 +44,7 @@ eureka:
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:9000/eureka/
 #/order-service/api/v1/order/save?user_id=2&product_id=1
-#自定义路由映射
+#自定义路由映射.
 zuul:
   routes:
     common-service: /apigateway/common/**
@@ -49,6 +57,14 @@ zuul:
   ignored-patterns: /*-service/**
   #忽略整个服务，对外提供接口
   #ignored-services: product-service
+  # 不清楚header
+  sensitive-headers:
 # 日志打印
 logging:
   path: /data/logs/${spring.application.name}
+
+
+
+
+
+

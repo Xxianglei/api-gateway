@@ -26,10 +26,19 @@ public class User implements Serializable {
     private String name;
     private String password;
     private String account;
-    private String create_date;
+    private String createDate;
     private String phone;
     private int status;
     private int vip;
+    private int superRoot;
+
+    public int getSuperRoot() {
+        return superRoot;
+    }
+
+    public void setSuperRoot(int superRoot) {
+        this.superRoot = superRoot;
+    }
 
     public String getFlowId() {
         return flowId;
@@ -63,12 +72,12 @@ public class User implements Serializable {
         this.account = account;
     }
 
-    public String getCreate_date() {
-        return create_date;
+    public String getCreateDate() {
+        return createDate;
     }
 
-    public void setCreate_date(String create_date) {
-        this.create_date = create_date;
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
     }
 
     public String getPhone() {

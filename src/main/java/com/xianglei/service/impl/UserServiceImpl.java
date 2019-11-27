@@ -16,14 +16,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(User user) {
-        User userResult;
         User normalUser = userMapper.getUserFromNomal(user);
-        User superUser = userMapper.getUserFromSuper(user);
-        if(Tools.isNull(normalUser)){
-            userResult =superUser;
-        }else{
-            userResult =normalUser;
-        }
-        return userResult;
+        return normalUser;
     }
 }
