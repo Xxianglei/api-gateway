@@ -22,16 +22,14 @@ eureka:
 #自定义路由映射
 zuul:
   routes:
-    order-service: /apigateway/**
-    product-service: /apigateway/**
-    common-service: /apigateway/**
-    parking-sercive: /apigateway/**
-    parkyy-service: /apigateway/**
-    pay-service: /apigateway/**
-    statistics-service: /apigateway/**
-    temppark-service: /apigateway/**
+    common-service: /apigateway/common/**
+    parking-sercive: /apigateway/parking/**
+    parkyy-service: /apigateway/parkyy/**
+    pay-service: /apigateway/pay/**
+    statistics-service: /apigateway/statistics/**
+    temppark-service: /apigateway/temppark/**
   #统一入口为上面的配置，其他入口忽略
- # ignored-patterns: /*-service/**
+  ignored-patterns: /*-service/**
   #忽略整个服务，对外提供接口
-  ignored-services: *
+  #ignored-services: product-service
 
