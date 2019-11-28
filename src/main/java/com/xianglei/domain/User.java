@@ -31,6 +31,24 @@ public class User implements Serializable {
     private int status;
     private int vip;
     private int superRoot;
+    private int age;
+    private int sexy;
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public int getSexy() {
+        return sexy;
+    }
+
+    public void setSexy(int sexy) {
+        this.sexy = sexy;
+    }
 
     public int getSuperRoot() {
         return superRoot;
