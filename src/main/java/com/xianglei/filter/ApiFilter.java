@@ -50,20 +50,16 @@ public class ApiFilter extends ZuulFilter {
     @Override
     public Object run() throws ZuulException {
         RequestContext context = RequestContext.getCurrentContext();
-        HttpServletRequest request = context.getRequest();
-        HttpSession session = request.getSession();
-        String user_flowId = (String)session.getAttribute("user_flowId");
-        User user = new User();
-        user.setFlowId(user_flowId);
-        User findUser = userService.getUser(user);
-        if (findUser != null) {
+        Boolean aBoolean = checkUserIsRightful();
+        if (aBoolean) {
             context.setSendZuulResponse(true); // 对该请求进行路由
             context.setResponseStatusCode(200);// 设置响应状态码
             logger.info("通过校验，网关转发");
             return null;
-        }else{
+        } else {
+            context = RequestContext.getCurrentContext();
             context.setSendZuulResponse(false); // 不对其进行路由
-            context.setResponseStatusCode(200);// 设置响应状态码
+            context.setResponseStatusCode(401);// 设置响应状态码
             response401(context.getResponse());
             return null;
         }
@@ -74,6 +70,7 @@ public class ApiFilter extends ZuulFilter {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         logger.warn("此操作需要先登录系统...");
+        PrintWriter writer = null;
         try {
             //响应结果
             BaseJson baseJson = new BaseJson(false);
@@ -81,12 +78,33 @@ public class ApiFilter extends ZuulFilter {
             baseJson.setMessage("您未登录，请先登录");
             response.setCharacterEncoding("utf-8");
             response.setContentType("application/json; charset=utf-8");
-            PrintWriter writer = response.getWriter();
+            writer = response.getWriter();
             ObjectMapper mapper = new ObjectMapper();
             String result = mapper.writeValueAsString(baseJson);
             writer.write(result);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("鉴权出错:{}", e);
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
         }
+    }
+
+    // 登录user_flowId是否存在
+    public Boolean checkUserIsRightful() {
+        RequestContext context = RequestContext.getCurrentContext();
+        HttpServletRequest request = context.getRequest();
+        HttpSession session = request.getSession();
+        String user_flowId = (String) session.getAttribute("user_flowId");
+        User user = new User();
+        user.setFlowId(user_flowId);
+        User findUser = userService.getUser(user);
+        if (!StringUtils.isEmpty(user_flowId) && findUser != null) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

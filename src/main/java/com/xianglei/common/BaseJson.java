@@ -1,5 +1,7 @@
 package com.xianglei.common;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  *
  * @author xianglei
@@ -9,6 +11,7 @@ public class BaseJson {
 
     private boolean status = false; // 此接口返回的状态，正确是true、错误false
     private Integer code; // 返回代码，eg： -1 0 1 等，根据业务场景自定义
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Object data; // 返回到页面的数据
     private String message;// 返回到页面的错误描述
 
