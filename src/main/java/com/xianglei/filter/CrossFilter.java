@@ -5,6 +5,7 @@ import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * 作者：xianglei
  * params: * @param null
  */
+@Component
 public class CrossFilter extends ZuulFilter {
     private static Logger logger = LoggerFactory.getLogger(CrossFilter.class);
     @Override
