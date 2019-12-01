@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
  * 作者：xianglei
  * params: * @param null
  */
-public class CorsFilter extends ZuulFilter {
-    private static Logger logger = LoggerFactory.getLogger(CorsFilter.class);
+public class CrossFilter extends ZuulFilter {
+    private static Logger logger = LoggerFactory.getLogger(CrossFilter.class);
     @Override
     public String filterType() {
         return "pre";
@@ -23,7 +23,7 @@ public class CorsFilter extends ZuulFilter {
 
     @Override
     public int filterOrder() {
-        return 0;
+        return 2;
     }
 
     @Override
@@ -41,6 +41,7 @@ public class CorsFilter extends ZuulFilter {
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT, GET");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+
         return null;
     }
 }
