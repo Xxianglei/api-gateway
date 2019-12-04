@@ -61,7 +61,8 @@ public class ApiFilter extends ZuulFilter {
             context = RequestContext.getCurrentContext();
             context.setSendZuulResponse(false); // 不对其进行路由
             context.setResponseStatusCode(401);// 设置响应状态码
-            response401(context.getResponse());
+            logger.warn("此操作需要先登录系统...");
+            //response401(context.getResponse());
             return null;
         }
     }

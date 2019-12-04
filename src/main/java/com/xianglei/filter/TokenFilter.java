@@ -64,7 +64,7 @@ public class TokenFilter extends ZuulFilter {
                 sendNoPass(context, "token校验未通过，token失效请重新登录");
             }
         } else {
-            sendNoPass(context, "token校验未通过，token为空");
+            sendNoPass(context, "请重新登录");
             return null;
         }
         return null;
