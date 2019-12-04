@@ -39,7 +39,7 @@ public class ApiFilter extends ZuulFilter {
 
     @Override
     public int filterOrder() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -94,17 +94,20 @@ public class ApiFilter extends ZuulFilter {
     // 登录user_flowId是否存在
     public Boolean checkUserIsRightful() {
         RequestContext context = RequestContext.getCurrentContext();
-        HttpServletRequest request = context.getRequest();
-        HttpSession session = request.getSession();
-        String user_flowId = (String) session.getAttribute("user_flowId");
-        User user = new User();
-        user.setFlowId(user_flowId);
-        User findUser = userService.getUser(user);
-        if (!StringUtils.isEmpty(user_flowId) && findUser != null) {
-            return true;
-        } else {
+        Object token = context.get("token");
+        if (Tools.isNull(token)) {
             return false;
+        } else {
+            String user_flowId = (String) token;
+            logger.info("获取到了传递过来的token对应的flowId:" + user_flowId);
+            User user = new User();
+            user.setFlowId(user_flowId);
+            User findUser = userService.getUser(user);
+            if (!StringUtils.isEmpty(user_flowId) && findUser != null) {
+                return true;
+            } else {
+                return false;
+            }
         }
-
     }
 }
