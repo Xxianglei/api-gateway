@@ -20,7 +20,12 @@ import javax.servlet.http.HttpSession;
 import javax.tools.Tool;
 import java.io.IOException;
 import java.io.PrintWriter;
-
+/**
+ * 描述：token过滤器
+ * 时间：[2019/12/4:12:32]
+ * 作者：xianglei
+ * params: * @param null
+ */
 @Component
 public class TokenFilter extends ZuulFilter {
     private static Logger logger = LoggerFactory.getLogger(TokenFilter.class);
@@ -37,7 +42,7 @@ public class TokenFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        return false;
+        return true;
     }
 
     @Override
