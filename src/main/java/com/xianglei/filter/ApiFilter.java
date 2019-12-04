@@ -5,6 +5,7 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import com.xianglei.common.BaseJson;
+import com.xianglei.common.JwtUtils;
 import com.xianglei.common.Tools;
 import com.xianglei.domain.User;
 import com.xianglei.service.UserService;
@@ -98,7 +99,8 @@ public class ApiFilter extends ZuulFilter {
         if (Tools.isNull(token)) {
             return false;
         } else {
-            String user_flowId = (String) token;
+            logger.info("获取到了传递过来的token:" + token.toString());
+            String user_flowId = JwtUtils.getFlowId(token.toString()) ;
             logger.info("获取到了传递过来的token对应的flowId:" + user_flowId);
             User user = new User();
             user.setFlowId(user_flowId);
