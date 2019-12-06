@@ -59,7 +59,7 @@ public class TokenFilter extends ZuulFilter {
         String tokens = request.getHeader("tokens");
         // 这个token其实是redis中的可以转成flowID
         String flowId = JwtUtils.getFlowId(tokens);
-        if (!Tools.isNull(flowId)&&redisTemplate.hasKey(flowId)) {
+        if (!Tools.isNull(flowId)&&redisTemplate.hasKey(tokens)) {
             if (JwtUtils.verify(tokens)) {
                 context.setSendZuulResponse(true); // 对该请求进行路由
                 context.setResponseStatusCode(200);// 设置响应状态码
