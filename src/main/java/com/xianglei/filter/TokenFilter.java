@@ -59,14 +59,14 @@ public class TokenFilter extends ZuulFilter {
         HttpServletRequest request = context.getRequest();
         // 拿到请求tokens
         String tokens = null;
-        Enumeration headers = request.getHeaderNames();
-        while (headers.hasMoreElements()) {
-            String headerName = (String) headers.nextElement();
-            Enumeration<String> headerValues = request.getHeaders(headerName);
-            while (headerValues.hasMoreElements()) {
-                if("tokens".equals(headerValues)){
-                    tokens=headerValues.nextElement();
-                }
+        Enumeration<?> headerNames = request.getHeaderNames();
+
+        while (headerNames.hasMoreElements()) {
+            // 获得请求头部的Key
+            String key = (String) headerNames.nextElement();
+            if ("tokens".equals(key)) {
+                tokens = request.getHeader(key);
+                break;
             }
         }
         // 这个token其实是redis中的可以转成flowID
