@@ -11,6 +11,7 @@ import com.xianglei.domain.User;
 import com.xianglei.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;

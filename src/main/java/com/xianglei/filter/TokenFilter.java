@@ -11,6 +11,8 @@ import com.xianglei.domain.User;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +30,9 @@ import java.io.PrintWriter;
  */
 @Component
 public class TokenFilter extends ZuulFilter {
+    @Autowired
+    RedisTemplate redisTemplate;
+
     private static Logger logger = LoggerFactory.getLogger(TokenFilter.class);
 
     @Override
@@ -50,8 +55,10 @@ public class TokenFilter extends ZuulFilter {
         logger.info("token校验开启");
         RequestContext context = RequestContext.getCurrentContext();
         HttpServletRequest request = context.getRequest();
-        HttpSession session = request.getSession();
-        Object token = session.getAttribute("user_flowId");
+        // 拿到请求tokens
+        String tokens = request.getHeader("tokens");
+        // 这个token其实是redis中的可以转成flowID
+        Object token = redisTemplate.opsForValue().get(tokens);
         if (!Tools.isNull(token)) {
             String rightToken = (String) token;
             if (JwtUtils.verify(rightToken)) {
