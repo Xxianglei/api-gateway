@@ -58,13 +58,14 @@ public class TokenFilter extends ZuulFilter {
         RequestContext context = RequestContext.getCurrentContext();
         HttpServletRequest request = context.getRequest();
         // 拿到请求tokens
-        Enumeration<String> headers = request.getHeaderNames();
-        String tokens = null;
+        String tokens=null;
+        Enumeration headers = request.getHeaderNames();
         while (headers.hasMoreElements()) {
-            String param = headers.nextElement();
-            if ("tokens".equals(param)) {
-                tokens = param;
-            }
+            String headerName = (String) headers.nextElement();
+            Enumeration<String> headerValues = request.getHeaders(headerName);
+           if("tokens".equals(headerValues)){
+               tokens=headerValues.nextElement();
+           }
         }
         // 这个token其实是redis中的可以转成flowID
         String flowId = JwtUtils.getFlowId(tokens);
