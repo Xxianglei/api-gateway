@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 public class ApiFilter extends ZuulFilter {
     @Autowired
     private UserService userService;
+    Boolean optionTag=false;
     private static Logger logger = LoggerFactory.getLogger(ApiFilter.class);
 
     @Override
@@ -49,7 +50,7 @@ public class ApiFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
         if (request.getMethod().equals("OPTIONS")) {
-            return false;
+            optionTag=true;
         }
         return true;
     }
@@ -57,7 +58,12 @@ public class ApiFilter extends ZuulFilter {
     @Override
     public Object run() throws ZuulException {
         RequestContext context = RequestContext.getCurrentContext();
-        Boolean aBoolean = checkUserIsRightful();
+        Boolean aBoolean=false;
+        if(optionTag){
+            aBoolean=true;
+        }else{
+            aBoolean = checkUserIsRightful();
+        }
         if (aBoolean) {
             context.setSendZuulResponse(true); // 对该请求进行路由
             context.setResponseStatusCode(200);// 设置响应状态码
