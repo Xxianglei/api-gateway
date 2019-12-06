@@ -58,15 +58,14 @@ public class TokenFilter extends ZuulFilter {
         // 拿到请求tokens
         String tokens = request.getHeader("tokens");
         // 这个token其实是redis中的可以转成flowID
-        Object token = redisTemplate.opsForValue().get(tokens);
-        if (!Tools.isNull(token)) {
-            String rightToken = (String) token;
-            if (JwtUtils.verify(rightToken)) {
+        String flowId = JwtUtils.getFlowId(tokens);
+        if (!Tools.isNull(flowId)&&redisTemplate.hasKey(flowId)) {
+            if (JwtUtils.verify(tokens)) {
                 context.setSendZuulResponse(true); // 对该请求进行路由
                 context.setResponseStatusCode(200);// 设置响应状态码
                 logger.info("通过token校验，网关转发进入api校验");
                 // 传递给APIFilter token值为FlowID
-                context.set("token",rightToken);
+                context.set("token",tokens);
             } else {
                 sendNoPass(context, "token校验未通过，token失效请重新登录");
             }
