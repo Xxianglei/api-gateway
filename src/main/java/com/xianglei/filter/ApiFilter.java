@@ -46,6 +46,11 @@ public class ApiFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
+        RequestContext ctx = RequestContext.getCurrentContext();
+        HttpServletRequest request = ctx.getRequest();
+        if (request.getMethod().equals("OPTIONS")) {
+            return false;
+        }
         return true;
     }
 
