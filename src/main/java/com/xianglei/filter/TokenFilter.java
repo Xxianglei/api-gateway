@@ -22,6 +22,8 @@ import javax.servlet.http.HttpSession;
 import javax.tools.Tool;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
+
 /**
  * 描述：token过滤器
  * 时间：[2019/12/4:12:32]
@@ -56,16 +58,23 @@ public class TokenFilter extends ZuulFilter {
         RequestContext context = RequestContext.getCurrentContext();
         HttpServletRequest request = context.getRequest();
         // 拿到请求tokens
-        String tokens = request.getHeader("tokens");
+        Enumeration<String> headers = request.getHeaderNames();
+        String tokens = null;
+        while (headers.hasMoreElements()) {
+            String param = headers.nextElement();
+            if ("tokens".equals(param)) {
+                tokens = param;
+            }
+        }
         // 这个token其实是redis中的可以转成flowID
         String flowId = JwtUtils.getFlowId(tokens);
-        if (!Tools.isNull(flowId)&&redisTemplate.hasKey(tokens)) {
+        if (!Tools.isNull(flowId) && redisTemplate.hasKey(tokens)) {
             if (JwtUtils.verify(tokens)) {
                 context.setSendZuulResponse(true); // 对该请求进行路由
                 context.setResponseStatusCode(200);// 设置响应状态码
                 logger.info("通过token校验，网关转发进入api校验");
                 // 传递给APIFilter token值为FlowID
-                context.set("token",tokens);
+                context.set("token", tokens);
             } else {
                 sendNoPass(context, "token校验未通过，token失效请重新登录");
             }

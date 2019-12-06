@@ -1,7 +1,11 @@
 package com.xianglei.common;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.xianglei.filter.TokenFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
@@ -11,10 +15,12 @@ public class JwtUtils {
     public static final long REFRESH_TOKEN_EXPIRE_TIME = 30 * 60 * 1000; //refreshToken过期时间
     private static final String ISSUER = "issuer"; //签发人
 
+    private static Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+
     /**
      * 生成签名
      */
-    public static String generateToken(String flowId){
+    public static String generateToken(String flowId) {
         Date now = new Date();
         Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY); //算法
 
@@ -30,7 +36,7 @@ public class JwtUtils {
     /**
      * 验证token
      */
-    public static boolean verify(String token){
+    public static boolean verify(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY); //算法
             JWTVerifier verifier = JWT.require(algorithm)
@@ -38,7 +44,7 @@ public class JwtUtils {
                     .build();
             verifier.verify(token);
             return true;
-        } catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return false;
@@ -47,11 +53,12 @@ public class JwtUtils {
     /**
      * 从token获取flowId
      */
-    public static String getFlowId(String token){
-        try{
+    public static String getFlowId(String token) {
+        try {
             return JWT.decode(token).getClaim("user_flowId").asString();
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
+            logger.info("token->flowId error :{}", ex);
         }
         return "";
     }
