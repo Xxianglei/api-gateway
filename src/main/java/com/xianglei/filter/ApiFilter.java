@@ -46,6 +46,12 @@ public class ApiFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
+        RequestContext context = RequestContext.getCurrentContext();
+        HttpServletRequest request = context.getRequest();
+        String method = request.getMethod();
+        if ("options".equals(method.toLowerCase())) {
+            return false;
+        }
         return true;
     }
 
@@ -53,13 +59,6 @@ public class ApiFilter extends ZuulFilter {
     public Object run() throws ZuulException {
         RequestContext context = RequestContext.getCurrentContext();
         Boolean aBoolean = false;
-        HttpServletRequest request = context.getRequest();
-        if (request.getMethod().equals("OPTIONS")) {
-            context.setSendZuulResponse(false); // option不对该请求进行路由
-            context.setResponseStatusCode(200);// 设置响应状态码
-            logger.info("走到api过滤器:option-->{}:IP--->{}", request.getMethod(), request.getRemoteAddr());
-            return null;
-        }
         aBoolean = checkUserIsRightful();
         if (aBoolean) {
             context.setSendZuulResponse(true); // 对该请求进行路由
