@@ -49,6 +49,12 @@ public class TokenFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
+        RequestContext context = RequestContext.getCurrentContext();
+        HttpServletRequest request = context.getRequest();
+        String method = request.getMethod();
+        if ("options".equals(method.toLowerCase())) {
+            return false;
+        }
         return true;
     }
 
@@ -58,29 +64,23 @@ public class TokenFilter extends ZuulFilter {
         String tokens = null;
         RequestContext context = RequestContext.getCurrentContext();
         HttpServletRequest request = context.getRequest();
-        if (request.getMethod().equals("OPTIONS")) {
-            context.setSendZuulResponse(false); // option不对该请求进行路由
-            context.setResponseStatusCode(200);// 设置响应状态码
-            logger.info("走到token过滤器:option");
-        } else {
-            // 其他请求方式则拿到请求tokens
-            tokens = request.getHeader("tokens");
-            // 这个token其实是redis中的可以转成flowID
-            String flowId = JwtUtils.getFlowId(tokens);
-            if (!Tools.isNull(flowId) && redisTemplate.hasKey(tokens)) {
-                if (JwtUtils.verify(tokens)) {
-                    context.setSendZuulResponse(true); // 对该请求进行路由
-                    context.setResponseStatusCode(200);// 设置响应状态码
-                    logger.info("通过token校验，网关转发进入api校验");
-                    // 传递给APIFilter token值为FlowID
-                    context.set("token", tokens);
-                } else {
-                    sendNoPass(context, "token校验未通过，token失效请重新登录");
-                }
+        // 其他请求方式则拿到请求tokens
+        tokens = request.getHeader("tokens") == null ? "" : request.getHeader("tokens");
+        // 这个token其实是redis中的可以转成flowID
+        String flowId = JwtUtils.getFlowId(tokens);
+        if (!Tools.isNull(flowId) && redisTemplate.hasKey(tokens)) {
+            if (JwtUtils.verify(tokens)) {
+                context.setSendZuulResponse(true); // 对该请求进行路由
+                context.setResponseStatusCode(200);// 设置响应状态码
+                logger.info("通过token校验，网关转发进入api校验");
+                // 传递给APIFilter token值为FlowID
+                context.set("token", tokens);
             } else {
-                sendNoPass(context, "请重新登录");
-                return null;
+                sendNoPass(context, "token校验未通过，token失效请重新登录");
             }
+        } else {
+            sendNoPass(context, "请重新登录");
+            return null;
         }
         return null;
     }

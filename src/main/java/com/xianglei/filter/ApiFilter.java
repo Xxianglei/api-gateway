@@ -57,7 +57,7 @@ public class ApiFilter extends ZuulFilter {
         if (request.getMethod().equals("OPTIONS")) {
             context.setSendZuulResponse(false); // option不对该请求进行路由
             context.setResponseStatusCode(200);// 设置响应状态码
-            logger.info("走到api过滤器:option");
+            logger.info("走到api过滤器:option-->{}:IP--->{}", request.getMethod(), request.getRemoteAddr());
             return null;
         }
         aBoolean = checkUserIsRightful();
