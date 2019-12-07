@@ -49,46 +49,37 @@ public class TokenFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        RequestContext ctx = RequestContext.getCurrentContext();
-        HttpServletRequest request = ctx.getRequest();
-        if (request.getMethod().equals("OPTIONS")) {
-            return false;
-        }
         return true;
     }
 
     @Override
     public Object run() throws ZuulException {
         logger.info("token校验开启");
+        String tokens = null;
         RequestContext context = RequestContext.getCurrentContext();
         HttpServletRequest request = context.getRequest();
-        // 拿到请求tokens
-        String tokens = null;
-        Enumeration<?> headerNames = request.getHeaderNames();
-
-        while (headerNames.hasMoreElements()) {
-            // 获得请求头部的Key
-            String key = (String) headerNames.nextElement();
-            if ("tokens".equals(key)) {
-                tokens = request.getHeader(key);
-                break;
-            }
-        }
-        // 这个token其实是redis中的可以转成flowID
-        String flowId = JwtUtils.getFlowId(tokens);
-        if (!Tools.isNull(flowId) && redisTemplate.hasKey(tokens)) {
-            if (JwtUtils.verify(tokens)) {
-                context.setSendZuulResponse(true); // 对该请求进行路由
-                context.setResponseStatusCode(200);// 设置响应状态码
-                logger.info("通过token校验，网关转发进入api校验");
-                // 传递给APIFilter token值为FlowID
-                context.set("token", tokens);
-            } else {
-                sendNoPass(context, "token校验未通过，token失效请重新登录");
-            }
+        if (request.getMethod().equals("OPTIONS")) {
+            context.setSendZuulResponse(false); // option不对该请求进行路由
+            context.setResponseStatusCode(200);// 设置响应状态码
         } else {
-            sendNoPass(context, "请重新登录");
-            return null;
+            // 其他请求方式则拿到请求tokens
+            tokens = request.getHeader("tokens");
+            // 这个token其实是redis中的可以转成flowID
+            String flowId = JwtUtils.getFlowId(tokens);
+            if (!Tools.isNull(flowId) && redisTemplate.hasKey(tokens)) {
+                if (JwtUtils.verify(tokens)) {
+                    context.setSendZuulResponse(true); // 对该请求进行路由
+                    context.setResponseStatusCode(200);// 设置响应状态码
+                    logger.info("通过token校验，网关转发进入api校验");
+                    // 传递给APIFilter token值为FlowID
+                    context.set("token", tokens);
+                } else {
+                    sendNoPass(context, "token校验未通过，token失效请重新登录");
+                }
+            } else {
+                sendNoPass(context, "请重新登录");
+                return null;
+            }
         }
         return null;
     }

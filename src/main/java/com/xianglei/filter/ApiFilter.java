@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 public class ApiFilter extends ZuulFilter {
     @Autowired
     private UserService userService;
-    Boolean optionTag=false;
     private static Logger logger = LoggerFactory.getLogger(ApiFilter.class);
 
     @Override
@@ -47,23 +46,14 @@ public class ApiFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        RequestContext ctx = RequestContext.getCurrentContext();
-        HttpServletRequest request = ctx.getRequest();
-        if (request.getMethod().equals("OPTIONS")) {
-            optionTag=true;
-        }
         return true;
     }
 
     @Override
     public Object run() throws ZuulException {
         RequestContext context = RequestContext.getCurrentContext();
-        Boolean aBoolean=false;
-        if(optionTag){
-            aBoolean=true;
-        }else{
-            aBoolean = checkUserIsRightful();
-        }
+        Boolean aBoolean = false;
+        aBoolean = checkUserIsRightful();
         if (aBoolean) {
             context.setSendZuulResponse(true); // 对该请求进行路由
             context.setResponseStatusCode(200);// 设置响应状态码
@@ -113,7 +103,7 @@ public class ApiFilter extends ZuulFilter {
             return false;
         } else {
             logger.info("获取到了传递过来的token:" + token.toString());
-            String user_flowId = JwtUtils.getFlowId(token.toString()) ;
+            String user_flowId = JwtUtils.getFlowId(token.toString());
             logger.info("获取到了传递过来的token对应的flowId:" + user_flowId);
             User user = new User();
             user.setFlowId(user_flowId);
