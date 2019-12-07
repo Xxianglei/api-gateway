@@ -61,6 +61,7 @@ public class TokenFilter extends ZuulFilter {
         if (request.getMethod().equals("OPTIONS")) {
             context.setSendZuulResponse(false); // option不对该请求进行路由
             context.setResponseStatusCode(200);// 设置响应状态码
+            logger.info("走到token过滤器:option");
         } else {
             // 其他请求方式则拿到请求tokens
             tokens = request.getHeader("tokens");
