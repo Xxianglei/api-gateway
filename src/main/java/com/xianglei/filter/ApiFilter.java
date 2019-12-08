@@ -63,6 +63,15 @@ public class ApiFilter extends ZuulFilter {
     @Override
     public Object run() throws ZuulException {
         RequestContext context = RequestContext.getCurrentContext();
+        HttpServletRequest request = context.getRequest();
+        if(request.getMethod().toLowerCase().equals("options")){
+            logger.info("---------------------------进入options请求处理-----------------------------");
+            logger.info("options请求拦截，直接返回200");
+            context.setSendZuulResponse(false); // 不对其进行路由
+            context.setResponseStatusCode(200);// 设置响应状态码
+            context.setResponseBody("options请求成功，待发起真实请求");
+            return null;
+        }
         Boolean aBoolean = false;
         aBoolean = checkUserIsRightful();
         if (aBoolean) {

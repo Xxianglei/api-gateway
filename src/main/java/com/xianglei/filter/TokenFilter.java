@@ -49,17 +49,6 @@ public class TokenFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        RequestContext context = RequestContext.getCurrentContext();
-        HttpServletRequest request = context.getRequest();
-        HttpServletResponse response = context.getResponse();
-        response.reset();
-        logger.info("---------------------------进入options请求处理-----------------------------");
-        if(request.getMethod().toLowerCase().equals("options")){
-            logger.info("options请求拦截，直接返回200");
-            response.setStatus(HttpServletResponse.SC_OK);
-            return false;
-        }
-        logger.info("---------------------------非options请求放行-----------------------------");
         return true;
     }
 
@@ -69,6 +58,14 @@ public class TokenFilter extends ZuulFilter {
         String tokens = null;
         RequestContext context = RequestContext.getCurrentContext();
         HttpServletRequest request = context.getRequest();
+        if(request.getMethod().toLowerCase().equals("options")){
+            logger.info("---------------------------进入options请求处理-----------------------------");
+            logger.info("options请求拦截，直接返回200");
+            context.setSendZuulResponse(false); // 不对其进行路由
+            context.setResponseStatusCode(200);// 设置响应状态码
+            context.setResponseBody("options请求成功，待发起真实请求");
+            return null;
+        }
         // 其他请求方式则拿到请求tokens
         tokens = request.getHeader("tokens") == null ? "" : request.getHeader("tokens");
         // 这个token其实是redis中的可以转成flowID
