@@ -1,18 +1,17 @@
 package com.xianglei.config;
 
 import com.xianglei.intercepter.CrossInterceptor;
-import com.xianglei.intercepter.MyWebUserIntercepter;
+import com.xianglei.intercepter.OptionsIntercepter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class MyWebMvcConfig implements WebMvcConfigurer {
 
     @Autowired
-    MyWebUserIntercepter intercepter;
+    OptionsIntercepter intercepter;
     @Autowired
     CrossInterceptor crossInterceptor;
     /**
