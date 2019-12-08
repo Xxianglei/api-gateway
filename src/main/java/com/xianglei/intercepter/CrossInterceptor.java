@@ -5,13 +5,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Configuration
-public class CrossInterceptor extends HandlerInterceptorAdapter {
+public class CrossInterceptor implements HandlerInterceptor {
 
     private static Logger logger = LoggerFactory.getLogger(CrossInterceptor.class);
     @Override
