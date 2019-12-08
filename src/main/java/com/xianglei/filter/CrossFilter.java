@@ -43,13 +43,11 @@ public class CrossFilter extends ZuulFilter {
     public Object run() throws ZuulException {
         logger.info("跨域请求过滤器");
         RequestContext currentContext = RequestContext.getCurrentContext();
-        HttpServletRequest request = currentContext.getRequest();
         HttpServletResponse response = currentContext.getResponse();
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT, GET");
+        response.setHeader("Access-Control-Allow-Origin", "www.caipark.com");
+        response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, " +
-                "WG-App-Version, WG-Device-Id, WG-Network-Type, WG-Vendor, WG-OS-Type, WG-OS-Version, WG-Device-Model, WG-CPU, WG-Sid, WG-App-Id, WG-Token,x-token,tokens");
+        response.setHeader("Access-Control-Allow-Headers", "*");
         response.addHeader("Access-Control-Allow-Credentials","true");
         return null;
     }
