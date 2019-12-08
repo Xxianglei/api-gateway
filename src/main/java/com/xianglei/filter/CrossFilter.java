@@ -44,7 +44,7 @@ public class CrossFilter extends ZuulFilter {
         logger.info("跨域请求过滤器");
         RequestContext currentContext = RequestContext.getCurrentContext();
         HttpServletResponse response = currentContext.getResponse();
-        response.setHeader("Access-Control-Allow-Origin", "www.caipark.com");
+        response.setHeader("Access-Control-Allow-Origin", "www.carpark.com");
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "*");
