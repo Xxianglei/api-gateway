@@ -49,12 +49,6 @@ public class TokenFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        RequestContext context = RequestContext.getCurrentContext();
-        HttpServletRequest request = context.getRequest();
-        String method = request.getMethod();
-        if ("options".equals(method.toLowerCase())) {
-            return false;
-        }
         return true;
     }
 

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * 作者：xianglei
  * params: * @param null
  */
-@Component
+//@Component
 public class CrossFilter extends ZuulFilter {
     private static Logger logger = LoggerFactory.getLogger(CrossFilter.class);
     @Override
@@ -30,18 +30,12 @@ public class CrossFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        RequestContext context = RequestContext.getCurrentContext();
-        HttpServletRequest request = context.getRequest();
-        String method = request.getMethod();
-        if ("options".equals(method.toLowerCase())) {
-            return false;
-        }
         return true;
     }
 
     @Override
     public Object run() throws ZuulException {
-        logger.info("跨域请求过滤器");
+
         RequestContext currentContext = RequestContext.getCurrentContext();
         HttpServletResponse response = currentContext.getResponse();
         response.setHeader("Access-Control-Allow-Origin", "*");
