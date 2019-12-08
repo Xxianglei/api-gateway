@@ -18,10 +18,13 @@ public class MyWebUserIntercepter extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        logger.info("---------------------------进入options请求拦截器-----------------------------");
         if(request.getMethod().equals("OPTIONS")){
+            logger.info("options请求拦截，直接返回200");
             response.setStatus(HttpServletResponse.SC_OK);
             return false;
         }
+        logger.info("---------------------------非options请求放行-----------------------------");
         return true;
     }
 }
