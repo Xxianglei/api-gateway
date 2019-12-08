@@ -46,6 +46,17 @@ public class ApiFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
+        RequestContext context = RequestContext.getCurrentContext();
+        HttpServletRequest request = context.getRequest();
+        HttpServletResponse response = context.getResponse();
+        response.reset();
+        logger.info("---------------------------进入options请求处理-----------------------------");
+        if(request.getMethod().toLowerCase().equals("options")){
+            logger.info("options请求拦截，直接返回200");
+            response.setStatus(HttpServletResponse.SC_OK);
+            return false;
+        }
+        logger.info("---------------------------非options请求放行-----------------------------");
         return true;
     }
 
