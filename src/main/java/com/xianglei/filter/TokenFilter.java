@@ -69,6 +69,10 @@ public class TokenFilter extends ZuulFilter {
         }
         // 其他请求方式则拿到请求tokens
         tokens = request.getHeader("tokens") == null ? "" : request.getHeader("tokens");
+        if(StringUtils.isEmpty(tokens)){
+            sendNoPass(context, "token为空");
+            return null;
+        }
         // 这个token其实是redis中的可以转成flowID
         String flowId = JwtUtils.getFlowId(tokens);
         if (!Tools.isNull(flowId) && redisTemplate.hasKey(tokens)) {
