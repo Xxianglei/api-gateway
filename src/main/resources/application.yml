@@ -8,20 +8,20 @@ spring:
     name: api-gateway
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-# 当前数据源操作类型
+    # 当前数据源操作类型
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://121.199.28.140:3306/BS_XIANGLEI?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
-# 初始化大小，最小，最大
+    # 初始化大小，最小，最大
     initialSize: 5
     minIdle: 5
     maxActive: 20
-  # 配置获取连接等待超时的时间
+    # 配置获取连接等待超时的时间
     maxWait: 60000
-  # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
     timeBetweenEvictionRunsMillis: 60000
-  # 配置一个连接在池中最小生存的时间，单位是毫秒
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
     minEvictableIdleTimeMillis: 300000
   session:
     ## Spring Session配置
@@ -35,6 +35,8 @@ spring:
   cloud:
     nacos:
       discovery:
+        port: 10000
+        ip: 106.54.75.24
         server-addr: 120.26.184.125:8848
 
 #/order-service/api/v1/order/save?user_id=2&product_id=1
@@ -53,7 +55,7 @@ zuul:
   #ignored-services: product-service
   # 不清楚header
   sensitive-headers:
-#  ignored-headers:
+  #  ignored-headers:
 
   host:
     connect-timeout-millis: 15000 #HTTP连接超时要比Hystrix的大
