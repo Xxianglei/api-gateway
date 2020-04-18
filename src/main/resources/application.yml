@@ -1,5 +1,6 @@
 server:
   port: 10000
+  connection-timeout: 2000
 
 
 #服务的名称
@@ -60,7 +61,6 @@ zuul:
   host:
     connect-timeout-millis: 15000 #HTTP连接超时要比Hystrix的大
     socket-timeout-millis: 60000   #socket超时
-
 #    ribbon:
 #      ReadTimeout: 10000
 #      ConnectTimeout: 10000
