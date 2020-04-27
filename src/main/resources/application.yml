@@ -46,10 +46,10 @@ zuul:
   routes:
     common-service: /apigateway/common/**
     parking-sercive: /apigateway/parking/**
-    parkyy-service: /apigateway/parkyy/**
+    reserve_service: /apigateway/reserve/**
     pay-service: /apigateway/pay/**
     statistics-service: /apigateway/statistics/**
-    temppark-service: /apigateway/temppark/**
+    account_service: /apigateway/account/**
   #统一入口为上面的配置，其他入口忽略
   ignored-patterns: /*-service/**
   #忽略整个服务，对外提供接口
