@@ -45,7 +45,7 @@ spring:
 zuul:
   routes:
     common-service: /apigateway/common/**
-    parking-sercive: /apigateway/parking/**
+    parking-service: /apigateway/parking/**
     reserve_service: /apigateway/reserve/**
     pay-service: /apigateway/pay/**
     statistics-service: /apigateway/statistics/**
