@@ -46,10 +46,10 @@ zuul:
   routes:
     common-service: /apigateway/common/**
     parking-service: /apigateway/parking/**
-    reserve_service: /apigateway/reserve/**
+    reserve-service: /apigateway/reserve/**
     pay-service: /apigateway/pay/**
     statistics-service: /apigateway/statistics/**
-    account_service: /apigateway/account/**
+    account-service: /apigateway/account/**
   #统一入口为上面的配置，其他入口忽略
   ignored-patterns: /*-service/**
   #忽略整个服务，对外提供接口
@@ -68,6 +68,14 @@ zuul:
 logging:
   path: /data/logs/${spring.application.name}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
 
 
 
